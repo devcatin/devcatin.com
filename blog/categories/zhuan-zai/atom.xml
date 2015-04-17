@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 转载 | 永不言弃]]></title>
   <link href="http://devcatin.github.io/blog/categories/zhuan-zai/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T15:32:15+08:00</updated>
+  <updated>2015-04-17T15:51:31+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -131,7 +131,6 @@
 
 <pre><code>This is an H1
 =============
-
 This is an H2
 -------------
 </code></pre>
@@ -141,18 +140,14 @@ This is an H2
 <p>类 Atx 形式则是在行首插入 1 到 6 个 <code>#</code> ，对应到标题 1 到 6 阶，例如：</p>
 
 <pre><code># 这是 H1
-
 ## 这是 H2
-
 ###### 这是 H6
 </code></pre>
 
 <p>你可以选择性地「闭合」类 atx 样式的标题，这纯粹只是美观用的，若是觉得这样看起来比较舒适，你就可以在行尾加上 <code>#</code>，而行尾的 <code>#</code> 数量也不用和开头一样（行首的井字符数量决定标题的阶数）：</p>
 
 <pre><code># 这是 H1 #
-
 ## 这是 H2 ##
-
 ### 这是 H3 ######
 </code></pre>
 
@@ -308,9 +303,9 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 </code></pre>
 
 <ul>
-<li><p>Bird</p></li>
-<li><p>Magic
-&#8220;`</p></li>
+<li>Bird</li>
+<li>Magic
+&#8220;`</li>
 </ul>
 
 
@@ -329,33 +324,29 @@ Suspendisse id sem consectetuer libero luctus adipiscing.
 </code></pre>
 
 <ol>
-<li><p>This is a list item with two paragraphs. Lorem ipsum dolor
+<li>This is a list item with two paragraphs. Lorem ipsum dolor
 sit amet, consectetuer adipiscing elit. Aliquam hendrerit
-mi posuere lectus.</p>
-
-<p>Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet
 vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
-sit amet velit.</p></li>
-<li><p>Suspendisse id sem consectetuer libero luctus adipiscing.
-&#8220;`</p></li>
+sit amet velit.</li>
+<li>Suspendisse id sem consectetuer libero luctus adipiscing.
+&#8220;`</li>
 </ol>
 
 
 <p>如果你每行都有缩进，看起来会看好很多，当然，再次地，如果你很懒惰，Markdown 也允许：</p>
 
 <pre><code>*   This is a list item with two paragraphs.
-
     This is the second paragraph in the list item. You're
 only required to indent the first line. Lorem ipsum dolor
 sit amet, consectetuer adipiscing elit.
-
-*   Another item in the same list.
+*    Another item in the same list.
 </code></pre>
 
 <p>如果要在列表项目内放进引用，那 <code>&gt;</code> 就需要缩进：</p>
 
 <pre><code>*   A list item with a blockquote:
-
     &gt; This is a blockquote
     &gt; inside a list item.
 </code></pre>
@@ -363,7 +354,6 @@ sit amet, consectetuer adipiscing elit.
 <p>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符：</p>
 
 <pre><code>*   一列表项包含一个列表区块：
-
         &lt;代码写在这&gt;
 </code></pre>
 
@@ -384,7 +374,6 @@ sit amet, consectetuer adipiscing elit.
 <p>要在 Markdown 中建立代码区块很简单，只要简单地缩进 4 个空格或是 1 个制表符就可以，例如，下面的输入：</p>
 
 <pre><code>这是一个普通段落：
-
     这是一个代码区块。
 </code></pre>
 
@@ -395,8 +384,6 @@ sit amet, consectetuer adipiscing elit.
 <p>这是一个普通段落：</p>
 
 
-
-
 <pre><code>这是一个代码区块。
 </code></pre>
 
@@ -405,20 +392,17 @@ sit amet, consectetuer adipiscing elit.
 这个每行一阶的缩进（4 个空格或是 1 个制表符），都会被移除，例如：
 </code></pre>
 
+<p>Here is an example of AppleScript:
+    tell application &ldquo;Foo&rdquo;
+        beep
+    end tell
+&#8220;`</p>
+
+<p>会被转换为：</p>
+
+<p>&#8220;`</p>
+
 <p>Here is an example of AppleScript:</p>
-
-<pre><code>tell application "Foo"
-    beep
-end tell
-</code></pre>
-
-<pre><code>
-会被转换为：
-</code></pre>
-
-<p>Here is an example of AppleScript:</p>
-
-
 
 
 <pre><code>tell application "Foo"
@@ -479,9 +463,8 @@ Markdown 支持两种形式的链接语法： 行内式和参考式两种形式�
 要建立一个行内式的链接，只要在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，例如：
 </code></pre>
 
-<p>This is <a href="http://example.com/" title="Title">an example</a> inline link.</p>
-
-<p><a href="http://example.net/">This link</a> has no title attribute.
+<p>This is <a href="http://example.com/" title="Title">an example</a> inline link.
+<a href="http://example.net/">This link</a> has no title attribute.
 &#8220;`</p>
 
 <p>会产生：</p>
@@ -490,8 +473,6 @@ Markdown 支持两种形式的链接语法： 行内式和参考式两种形式�
 
 <p>This is <a href="http://example.com/" title="Title">
 an example</a> inline link.</p>
-
-
 
 
 <p><a href="http://example.net/">This link</a> has no
