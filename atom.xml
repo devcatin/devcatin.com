@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:37:01+08:00</updated>
+  <updated>2015-04-17T17:38:45+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -15,10 +15,243 @@
   
   <entry>
     <title type="html"><![CDATA[IOS UIWebView 长按图片保存到本地相册]]></title>
-    <link href="http://devcatin.github.io/blog/2015/04/17/ios-uiwebview-chang-an-tu-pian-bao-cun-dao-ben-di-xiang-ce/"/>
-    <updated>2015-04-17T17:36:47+08:00</updated>
-    <id>http://devcatin.github.io/blog/2015/04/17/ios-uiwebview-chang-an-tu-pian-bao-cun-dao-ben-di-xiang-ce</id>
-    <content type="html"><![CDATA[
+    <link href="http://devcatin.github.io/blog/2015/01/19/ios-uiwebview-chang-an-tu-pian-bao-cun-dao-ben-di-xiang-ce/"/>
+    <updated>2015-01-19T13:51:50+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/01/19/ios-uiwebview-chang-an-tu-pian-bao-cun-dao-ben-di-xiang-ce</id>
+    <content type="html"><![CDATA[<p>我们所要解决的问题如题目所示：ios中，长按Webview中的图片，将图片保存到本地相册。</p>
+
+<!--more-->
+
+
+<p>解决方案：对load的html网页，执行js注入，通过在webview中执行js代码，来响应点击事件，通过js代码来模拟长按事件。发现图片的位置，获得图片的url链接，通过此链接获得图片，将此图片保存到本地相册。</p>
+
+<p>js注入代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>static NSString* const kTouchJavaScriptString=
+</span><span class='line'>@"document.ontouchstart=function(event){\
+</span><span class='line'>x=event.targetTouches[0].clientX;\
+</span><span class='line'>y=event.targetTouches[0].clientY;\
+</span><span class='line'>document.location=\"myweb:touch:start:\"+x+\":\"+y;};\
+</span><span class='line'>document.ontouchmove=function(event){\
+</span><span class='line'>x=event.targetTouches[0].clientX;\
+</span><span class='line'>y=event.targetTouches[0].clientY;\
+</span><span class='line'>document.location=\"myweb:touch:move:\"+x+\":\"+y;};\
+</span><span class='line'>document.ontouchcancel=function(event){\
+</span><span class='line'>document.location=\"myweb:touch:cancel\";};\
+</span><span class='line'>document.ontouchend=function(event){\
+</span><span class='line'>document.location=\"myweb:touch:end\";};";</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在开始之前先要定义几个宏</p>
+
+<p>//#define GESTURE_STATE_START @&ldquo;start&rdquo;</p>
+
+<p>//#define GESTURE_STATE_MOVE  @&ldquo;move&rdquo;</p>
+
+<p>//define  GESTURE_STATE_END   @&ldquo;end&rdquo;</p>
+
+<p>//define SNS_IMAGE_HINT_SAVE_FAILE @&ldquo;Failure&rdquo;</p>
+
+<p>//define SNS_IMAGE_HINT_SAVE_SUCCE @&ldquo;Sucess&rdquo;</p>
+
+<p>@property (strong, nonatomic) NSString *gesState</p>
+
+<p>@property (strong, nonatomic) NSString *imgURL</p>
+
+<p>@property (strong, nonatomic) NSTimer  *timer</p>
+
+<p>js执行代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span><span class="ss">webView</span><span class="p">:(</span><span class="no">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="ss">shouldStartLoadWithRequest</span><span class="p">:(</span><span class="no">NSURLRequest</span> <span class="o">*</span><span class="p">)</span><span class="n">_request</span> <span class="ss">navigationType</span><span class="p">:(</span><span class="no">UIWebViewNavigationType</span><span class="p">)</span><span class="n">navigationType</span> <span class="p">{</span>
+</span><span class='line'>    <span class="no">NSString</span> <span class="o">*</span><span class="n">requestString</span> <span class="o">=</span> <span class="err">［</span><span class="n">_request</span> <span class="no">URL</span><span class="o">]</span> <span class="n">absoluteString</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSArray</span> <span class="o">*</span><span class="n">components</span> <span class="o">=</span> <span class="o">[</span><span class="n">requestString</span> <span class="ss">componentsSeparatedByString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;:&quot;</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">components</span> <span class="n">count</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">[</span><span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">[</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>                                   <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;myweb&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="o">[</span><span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">[</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">1</span><span class="o">]</span> <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;touch&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="sr">//</span><span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;you are touching!&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="sr">//</span><span class="no">NSTimeInterval</span> <span class="n">delaytime</span> <span class="o">=</span> <span class="no">Delaytime</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">[</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">2</span><span class="o">]</span> <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;start&quot;</span><span class="o">]</span><span class="p">){</span>
+</span><span class='line'>                 <span class="sr">/*@需延时判断是否响应页面内的js*/</span>
+</span><span class='line'>                <span class="n">_gesState</span> <span class="o">=</span> <span class="no">GESTURE_STATE_START</span><span class="p">;</span>
+</span><span class='line'>                <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;touch start!&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="n">float</span> <span class="n">ptX</span> <span class="o">=</span> <span class="err">［</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">3</span><span class="o">]</span><span class="n">floatValue</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">float</span> <span class="n">ptY</span> <span class="o">=</span> <span class="err">［</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">4</span><span class="o">]</span><span class="n">floatValue</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;touch point (%f, %f)&quot;</span><span class="p">,</span> <span class="n">ptX</span><span class="p">,</span> <span class="n">ptY</span><span class="p">);</span>
+</span><span class='line'>                <span class="no">NSString</span> <span class="o">*</span><span class="n">js</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;document.elementFromPoint(%f, %f).tagName&quot;</span><span class="p">,</span> <span class="n">ptX</span><span class="p">,</span> <span class="n">ptY</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="no">NSString</span> <span class="o">*</span> <span class="n">tagName</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">getWebView</span> <span class="ss">stringByEvaluatingJavaScriptFromString</span><span class="p">:</span><span class="n">js</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">_imgURL</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">;</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">tagName</span> <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;IMG&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">_imgURL</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;document.elementFromPoint(%f, %f).src&quot;</span><span class="p">,</span> <span class="n">ptX</span><span class="p">,</span> <span class="n">ptY</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">_imgURL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">_timer</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSTimer</span> <span class="ss">scheduledTimerWithTimeInterval</span><span class="p">:</span><span class="mi">1</span> <span class="ss">target</span><span class="p">:</span><span class="nb">self</span> <span class="ss">selector</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="n">handleLongTouch</span><span class="p">)</span> <span class="ss">userInfo</span><span class="p">:</span><span class="kp">nil</span> <span class="ss">repeats</span><span class="p">:</span><span class="no">NO</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="o">[</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">2</span><span class="o">]</span> <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;move&quot;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="sr">//</span><span class="o">**</span><span class="err">如果</span><span class="n">touch</span><span class="err">动作是滑动，则取消</span><span class="n">hanleLongTouch</span><span class="err">动作</span><span class="o">**//</span>
+</span><span class='line'>                <span class="n">_gesState</span> <span class="o">=</span> <span class="no">GESTURE_STATE_MOVE</span><span class="p">;</span>
+</span><span class='line'>                <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;you are move&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="p">(</span><span class="no">NSString</span><span class="o">*</span><span class="p">)</span><span class="o">[</span><span class="n">components</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">2</span><span class="o">]</span><span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;end&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="o">[</span><span class="n">_timer</span> <span class="n">invalidate</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">_timer</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">_gesState</span> <span class="o">=</span> <span class="no">GESTURE_STATE_END</span><span class="p">;</span>
+</span><span class='line'>                <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;touch end&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="no">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="no">YES</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果点击的是图片，并且按住的时间超过1s，执行handleLongTouch函数，处理图片的保存操作。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">handleLongTouch</span> <span class="p">{</span>
+</span><span class='line'>    <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;%@&quot;</span><span class="p">,</span> <span class="n">_imgURL</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">_imgURL</span> <span class="o">&amp;&amp;</span> <span class="n">_gesState</span> <span class="o">==</span> <span class="no">GESTURE_STATE_START</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="no">UIActionSheet</span><span class="o">*</span> <span class="n">sheet</span> <span class="o">=</span> <span class="err">［</span><span class="no">UIActionSheet</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithTitle</span><span class="p">:</span><span class="kp">nil</span> <span class="ss">delegate</span><span class="p">:</span><span class="nb">self</span> <span class="ss">cancelButtonTitle</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;取消&quot;</span> <span class="ss">destructiveButtonTitle</span><span class="p">:</span><span class="kp">nil</span> <span class="ss">otherButtonTitles</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;保存图片&quot;</span><span class="p">,</span> <span class="kp">nil</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">sheet</span><span class="o">.</span><span class="n">cancelButtonIndex</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">numberOfButtons</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">[</span><span class="n">sheet</span> <span class="ss">showInView</span><span class="p">:</span><span class="o">[</span><span class="no">UIApplication</span> <span class="n">sharedApplication</span><span class="o">].</span><span class="n">keyWindow</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将图片保存到相册方法:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">actionSheet</span><span class="p">:(</span><span class="no">UIActionSheet</span> <span class="o">*</span><span class="p">)</span><span class="n">actionSheet</span> <span class="ss">clickedButtonAtIndex</span><span class="p">:(</span><span class="no">NSInteger</span><span class="p">)</span><span class="n">buttonIndex</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">actionSheet</span><span class="o">.</span><span class="n">numberOfButtons</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">buttonIndex</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="no">NSString</span><span class="o">*</span> <span class="n">title</span> <span class="o">=</span> <span class="o">[</span><span class="n">actionSheet</span> <span class="ss">buttonTitleAtIndex</span><span class="p">:</span><span class="n">buttonIndex</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">title</span> <span class="ss">isEqualToString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;保存图片&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">_imgURL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;imgurl = %@&quot;</span><span class="p">,</span> <span class="n">_imgURL</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="no">NSString</span> <span class="o">*</span><span class="n">urlToSave</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">getWebView</span> <span class="ss">stringByEvaluatingJavaScriptFromString</span><span class="p">:</span><span class="n">_imgURL</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>        <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;image url=%@&quot;</span><span class="p">,</span> <span class="n">urlToSave</span><span class="p">);</span>
+</span><span class='line'>        <span class="no">NSData</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSData</span> <span class="ss">dataWithContentsOfURL</span><span class="p">:</span><span class="o">[</span><span class="no">NSURL</span> <span class="ss">URLWithString</span><span class="p">:</span><span class="n">urlToSave</span><span class="err">］</span><span class="p">;</span>
+</span><span class='line'>        <span class="no">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="o">[</span><span class="no">UIImage</span> <span class="ss">imageWithData</span><span class="p">:</span><span class="n">data</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>        <span class="sr">//</span><span class="no">UIImageWriteToSavedPhotosAlbum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span><span class="kp">nil</span><span class="p">);</span>
+</span><span class='line'>        <span class="no">UIImageWriteToSavedPhotosAlbum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">self</span><span class="p">,</span> <span class="vi">@selector</span><span class="p">(</span><span class="ss">image</span><span class="p">:</span><span class="ss">didFinishSavingWithError</span><span class="p">:</span><span class="ss">contextInfo</span><span class="p">:),</span> <span class="kp">nil</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>保存成功或失败提示信息:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">image</span><span class="p">:(</span><span class="no">UIImage</span> <span class="o">*</span><span class="p">)</span><span class="n">image</span> <span class="ss">didFinishSavingWithError</span><span class="p">:(</span><span class="no">NSError</span><span class="o">*</span><span class="p">)</span><span class="n">error</span> <span class="ss">contextInfo</span><span class="p">:(</span><span class="n">void</span><span class="o">*</span><span class="p">)</span><span class="n">contextInfo</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">){</span>
+</span><span class='line'>        <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;Error&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="o">[</span><span class="nb">self</span> <span class="ss">showAlert</span><span class="p">:</span><span class="no">SNS_IMAGE_HINT_SAVE_FAILE</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;OK&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="o">[</span><span class="nb">self</span> <span class="ss">showAlert</span><span class="p">:</span><span class="no">SNS_IMAGE_HINT_SAVE_SUCCE</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>总结：这篇文章主要是体现objecttive-c和js的交互。通过这篇文章，我们可以将app中UIWebView加载的html页面上的图片保存到自己的相册中。具体Demo就不提供了。</p>
 ]]></content>
   </entry>
   
