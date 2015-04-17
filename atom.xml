@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T13:32:08+08:00</updated>
+  <updated>2015-04-17T13:50:19+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Markdown语法说明(简体中文版)]]></title>
+    <link href="http://devcatin.github.io/blog/2015/04/17/markdownyu-fa-shuo-ming-jian-ti-zhong-wen-ban/"/>
+    <updated>2015-04-17T13:36:22+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/04/17/markdownyu-fa-shuo-ming-jian-ti-zhong-wen-ban</id>
+    <content type="html"><![CDATA[<h3>一.概述</h3>
+
+<h4>1.宗旨</h4>
+
+<p>Markdown 的目标是实现「易读易写」。</p>
+
+<p>可读性，无论如何，都是最重要的。一份使用 Markdown 格式撰写的文件应该可以直接以纯文本发布，并且看起来不会像是由许多标签或是格式指令所构成。Markdown 语法受到一些既有 text-to-HTML 格式的影响，包括 ‘Setext’、atx、Textile、reStructuredText、Grutatext 和 EtText，而最大灵感来源其实是纯文本电子邮件的格式。</p>
+
+<h5>2.兼容HTML</h5>
+
+<h5>3.特殊字符自动转换</h5>
+
+<h3>二.区块元素</h3>
+
+<h5>1.段落和换行</h5>
+
+<h5>2.标题</h5>
+
+<h5>3.区块引用</h5>
+
+<h5>4.列表</h5>
+
+<h5>5.代码区块</h5>
+
+<h5>6.分割线</h5>
+
+<h3>三.区段元素</h3>
+
+<h5>1.链接</h5>
+
+<h5>2.强调</h5>
+
+<h5>3.代码</h5>
+
+<h5>4.图片</h5>
+
+<h3>四.其他</h3>
+
+<h5>1.反斜杠</h5>
+
+<h5>2.自动链接</h5>
+
+<h3>五.感谢</h3>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[利用Octopress搭建一个Github博客]]></title>
