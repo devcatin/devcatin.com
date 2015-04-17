@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:44:10+08:00</updated>
+  <updated>2015-04-17T17:45:10+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS多线程编程]]></title>
+    <link href="http://devcatin.github.io/blog/2015/04/17/iosduo-xian-cheng-bian-cheng/"/>
+    <updated>2015-04-17T17:45:02+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/04/17/iosduo-xian-cheng-bian-cheng</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UIDynamic(捕捉行为)]]></title>
