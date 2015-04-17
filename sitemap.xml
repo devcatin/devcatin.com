@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://devcatin.github.io/blog/2015/04/17/markdownyu-fa-shuo-ming-jian-ti-zhong-wen-ban/</loc>
-    <lastmod>2015-04-17T13:36:22+08:00</lastmod>
-  </url>
-  <url>
     <loc>http://devcatin.github.io/blog/2015/04/17/li-yong-octopressda-jian-%5B%3F%5D-ge-githubbo-ke/</loc>
     <lastmod>2015-04-17T13:24:26+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://devcatin.github.io/blog/2014/12/17/markdownyu-fa-shuo-ming-jian-ti-zhong-wen-ban/</loc>
+    <lastmod>2014-12-17T13:14:31+08:00</lastmod>
   </url>
   <url>
     <loc>http://devcatin.github.io/blog/archives/</loc>
   </url>
   <url>
     <loc>http://devcatin.github.io/</loc>
+  </url>
+  <url>
+    <loc>http://devcatin.github.io/blog/categories/iostan-suo/</loc>
   </url>
   <url>
     <loc>http://devcatin.github.io/blog/categories/zhuan-zai/</loc>
