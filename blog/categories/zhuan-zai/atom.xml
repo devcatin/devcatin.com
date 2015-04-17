@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 转载 | 永不言弃]]></title>
   <link href="http://devcatin.github.io/blog/categories/zhuan-zai/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:31:42+08:00</updated>
+  <updated>2015-04-17T17:35:09+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[利用Octopress搭建一个Github博客]]></title>
-    <link href="http://devcatin.github.io/blog/2015/04/17/li-yong-octopressda-jian-%5B%3F%5D-ge-githubbo-ke/"/>
-    <updated>2015-04-17T13:24:26+08:00</updated>
-    <id>http://devcatin.github.io/blog/2015/04/17/li-yong-octopressda-jian-[?]-ge-githubbo-ke</id>
+    <link href="http://devcatin.github.io/blog/2014/12/03/li-yong-octopressda-jian-%5B%3F%5D-ge-githubbo-ke/"/>
+    <updated>2014-12-03T22:08:47+08:00</updated>
+    <id>http://devcatin.github.io/blog/2014/12/03/li-yong-octopressda-jian-[?]-ge-githubbo-ke</id>
     <content type="html"><![CDATA[<h3>小引</h3>
 
 <p><code>Octopress</code>是利用<code>Jekyll</code>博客引擎开发的一个博客系统，生成的静态页面能够很好的在github page上展现。号称是hacker专属的一个博客系统(<code>A blogging framework for hackers.</code>)
