@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:38:45+08:00</updated>
+  <updated>2015-04-17T17:39:53+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS 开发技术点第1期]]></title>
+    <link href="http://devcatin.github.io/blog/2015/04/17/ios-kai-fa-ji-zhu-dian-di-1qi/"/>
+    <updated>2015-04-17T17:39:44+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/04/17/ios-kai-fa-ji-zhu-dian-di-1qi</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS UIWebView 长按图片保存到本地相册]]></title>
