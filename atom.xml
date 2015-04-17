@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:42:44+08:00</updated>
+  <updated>2015-04-17T17:44:10+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -15,10 +15,162 @@
   
   <entry>
     <title type="html"><![CDATA[UIDynamic(捕捉行为)]]></title>
-    <link href="http://devcatin.github.io/blog/2015/04/17/uidynamic-bu-zhuo-xing-wei/"/>
-    <updated>2015-04-17T17:41:49+08:00</updated>
-    <id>http://devcatin.github.io/blog/2015/04/17/uidynamic-bu-zhuo-xing-wei</id>
-    <content type="html"><![CDATA[
+    <link href="http://devcatin.github.io/blog/2015/02/25/uidynamic-bu-zhuo-xing-wei/"/>
+    <updated>2015-02-25T16:39:53+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/02/25/uidynamic-bu-zhuo-xing-wei</id>
+    <content type="html"><![CDATA[<h3>一.简介</h3>
+
+<hr />
+
+<p>可以让物体迅速冲倒某个位置(捕捉位置)，捕捉到位置之后会带有一定的震动：</p>
+
+<!--more-->
+
+
+<p>UISnapBehavior的初始化</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="ss">initWithItem</span><span class="p">:(</span><span class="nb">id</span> <span class="o">&lt;</span><span class="no">UIDynamicItem</span><span class="o">&gt;</span><span class="p">)</span><span class="n">item</span> <span class="ss">snapToPoint</span><span class="p">:(</span><span class="no">CGPoint</span><span class="p">)</span><span class="n">point</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>UISnapBehavior常见属性</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="no">CGFloat</span> <span class="n">damping</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用于减幅、减震（取值范围是0.0 ~ 1.0，值越大，震动幅度越小）</p>
+
+<p>UISnapBehavior使用注意:</p>
+
+<p>　　如果要进行连续的捕捉行为，需要先把前面的捕捉行为从物理仿真器中移除
+　　
+　　</p>
+
+<h3>二.代码说明</h3>
+
+<hr />
+
+<p>在storyboard中放一个view控件，作为演示用的仿真元素。</p>
+
+<p>代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sr">//</span>
+</span><span class='line'><span class="sr">//</span>  <span class="no">ViewController</span><span class="o">.</span><span class="n">m</span>
+</span><span class='line'><span class="sr">//</span>  <span class="mi">13</span><span class="o">-</span><span class="err">捕捉行为</span>
+</span><span class='line'><span class="sr">//</span>
+</span><span class='line'><span class="sr">//</span>  <span class="no">Created</span> <span class="n">by</span> <span class="no">Grant</span> <span class="n">on</span> <span class="mi">15</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">25</span><span class="o">.</span>
+</span><span class='line'><span class="sr">//</span>  <span class="no">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2014</span><span class="err">年</span> <span class="no">BG</span><span class="o">.</span> <span class="no">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="o">.</span>
+</span><span class='line'><span class="sr">//</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#import &quot;ViewController.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@interface</span> <span class="no">ViewController</span> <span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">weak</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="no">IBOutlet</span> <span class="no">UIView</span> <span class="o">*</span><span class="n">blueView</span><span class="p">;</span>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span><span class="no">UIDynamicAnimator</span> <span class="o">*</span><span class="n">animator</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@implementation</span> <span class="no">ViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">UIDynamicAnimator</span> <span class="o">*</span><span class="p">)</span><span class="n">animator</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">_animator</span> <span class="o">==</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="sr">//</span><span class="err">创建物理仿真器，设置仿真范围，</span><span class="no">ReferenceView</span><span class="err">为参照视图</span>
+</span><span class='line'>        <span class="n">_animator</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UIDynamicAnimator</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithReferenceView</span><span class="p">:</span><span class="nb">self</span><span class="o">.</span><span class="n">view</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">_animator</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="o">[</span><span class="k">super</span> <span class="n">viewDidLoad</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">touchesBegan</span><span class="p">:(</span><span class="no">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="n">touches</span> <span class="ss">withEvent</span><span class="p">:(</span><span class="no">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="n">event</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="sr">//</span><span class="err">获取一个触摸点</span>
+</span><span class='line'>    <span class="no">UITouch</span> <span class="o">*</span><span class="n">touch</span> <span class="o">=</span> <span class="o">[</span><span class="n">touches</span> <span class="n">anyObject</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">CGPoint</span> <span class="n">point</span> <span class="o">=</span> <span class="o">[</span><span class="n">touch</span> <span class="ss">locationInView</span><span class="p">:</span><span class="n">touch</span><span class="o">.</span><span class="n">view</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="sr">//</span><span class="mi">1</span><span class="o">.</span><span class="err">创建捕捉行为</span>
+</span><span class='line'>    <span class="sr">//</span><span class="err">需要传入两个参数：一个物理仿真元素，一个捕捉点</span>
+</span><span class='line'>    <span class="no">UISnapBehavior</span> <span class="o">*</span><span class="n">snap</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UISnapBehavior</span> <span class="n">alloc</span><span class="o">]</span> <span class="ss">initWithItem</span><span class="p">:</span><span class="nb">self</span><span class="o">.</span><span class="n">blueView</span> <span class="ss">snapToPoint</span><span class="p">:</span><span class="n">point</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="sr">//</span><span class="err">设置防震系数（</span><span class="mi">0</span><span class="o">~</span><span class="mi">1</span><span class="err">，数值越大，震动的幅度越小）</span>
+</span><span class='line'>    <span class="n">snap</span><span class="o">.</span><span class="n">damping</span> <span class="o">=</span> <span class="n">arc4random_uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">.</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="sr">//</span><span class="mi">2</span><span class="o">.</span><span class="err">执行捕捉行为</span>
+</span><span class='line'>    <span class="sr">//</span><span class="err">注意：这个控件只能用在一个仿真行为上，如果要拥有持续的仿真行为，那么需要把之前的所有仿真行为删除</span>
+</span><span class='line'>    <span class="sr">//</span><span class="err">删除之前的所有仿真行为</span>
+</span><span class='line'>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">animator</span> <span class="n">removeAllBehaviors</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">animator</span> <span class="ss">addBehavior</span><span class="p">:</span><span class="n">snap</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> 小结：我们可以在做项目时加上以上的用户交互效果，会给用户不一样的体验。</p>
 ]]></content>
   </entry>
   
