@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:48:31+08:00</updated>
+  <updated>2015-04-17T17:50:43+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -15,10 +15,313 @@
   
   <entry>
     <title type="html"><![CDATA[IOS UITableView中异步加载图片]]></title>
-    <link href="http://devcatin.github.io/blog/2015/04/17/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian/"/>
-    <updated>2015-04-17T17:48:21+08:00</updated>
-    <id>http://devcatin.github.io/blog/2015/04/17/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian</id>
-    <content type="html"><![CDATA[
+    <link href="http://devcatin.github.io/blog/2015/03/25/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian/"/>
+    <updated>2015-03-25T10:46:11+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/03/25/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian</id>
+    <content type="html"><![CDATA[<p>在平时做项目时，经常会遇到关于UITableView加载网络图片的问题，一下是几种常用的解决方案：</p>
+
+<p>1.使用第三方类库：<a href="https://github.com/rs/SDWebImage">SDWebImage</a></p>
+
+<p>首先下载该类库，然后添加到自己的项目工程中，具体使用代码如下：</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="c1">#import &lt;SDWebImage/UIImageView+WebCache.h&gt;</span>
+</span><span class='line'> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>
+</span><span class='line'> <span class="o">-</span> <span class="p">(</span><span class="no">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="ss">tableView</span><span class="p">:(</span><span class="no">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="n">tableView</span> <span class="ss">cellForRowAtIndexPath</span><span class="p">:(</span><span class="no">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="n">indexPath</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">static</span> <span class="no">NSString</span> <span class="o">*</span><span class="no">MyIdentifier</span> <span class="o">=</span> <span class="err">@</span><span class="s2">&quot;MyIdentifier&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">UITableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="o">[</span><span class="n">tableView</span> <span class="ss">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="no">MyIdentifier</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">cell</span> <span class="o">==</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">cell</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UITableViewCell</span> <span class="n">alloc</span><span class="o">]</span> <span class="ss">initWithStyle</span><span class="p">:</span><span class="no">UITableViewCellStyleDefault</span>
+</span><span class='line'>                     <span class="ss">reuseIdentifier</span><span class="p">:</span><span class="no">MyIdentifier</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="sr">//</span> <span class="no">Here</span> <span class="n">we</span> <span class="n">use</span> <span class="n">the</span> <span class="kp">new</span> <span class="n">provided</span> <span class="ss">setImageWithURL</span><span class="p">:</span> <span class="nb">method</span> <span class="n">to</span> <span class="nb">load</span> <span class="n">the</span> <span class="n">web</span> <span class="n">image</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">cell</span><span class="o">.</span><span class="n">imageView</span> <span class="ss">setImageWithURL</span><span class="p">:</span><span class="o">[</span><span class="no">NSURL</span> <span class="ss">URLWithString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;http://www.domain.com/path/to/image.jpg&quot;</span><span class="o">]</span>
+</span><span class='line'>           <span class="ss">placeholderImage</span><span class="p">:</span><span class="o">[</span><span class="no">UIImage</span> <span class="ss">imageNamed</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;placeholder.png&quot;</span><span class="o">]]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cell</span><span class="o">.</span><span class="n">textLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="err">@</span><span class="s2">&quot;My Text&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.使用iOS自有的异步多线程，下载好图片后存入cache，再使用delegate函数更新tableview：</p>
+
+<ul>
+<li>(void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation</li>
+</ul>
+
+
+<p>初始化：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@interface</span> <span class="no">ViewController</span> <span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span>  <span class="no">NSMutableArray</span> <span class="o">*</span><span class="n">imageArray</span><span class="p">;</span>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="no">NSCache</span> <span class="o">*</span><span class="n">imageCache</span><span class="p">;</span>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">weak</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="no">IBOutlet</span> <span class="no">UITableView</span> <span class="o">*</span><span class="n">myCustomTableView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@implementation</span> <span class="no">ViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">[</span><span class="k">super</span> <span class="n">viewDidLoad</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">imageCache</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSCache</span> <span class="n">alloc</span><span class="o">]</span> <span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>TableView delegate函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">NSInteger</span><span class="p">)</span><span class="ss">numberOfSectionsInTableView</span><span class="p">:(</span><span class="no">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="n">tableView</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">NSInteger</span><span class="p">)</span><span class="ss">tableView</span><span class="p">:(</span><span class="no">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="n">tableView</span> <span class="ss">numberOfRowsInSection</span><span class="p">:(</span><span class="no">NSInteger</span><span class="p">)</span><span class="n">section</span> <span class="p">{</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="no">Number</span> <span class="n">of</span> <span class="n">rows</span> <span class="n">is</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">time</span> <span class="n">zones</span> <span class="k">in</span> <span class="n">the</span> <span class="n">region</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">section</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">32</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">UITableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="ss">tableView</span><span class="p">:(</span><span class="no">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="n">tableView</span> <span class="ss">cellForRowAtIndexPath</span><span class="p">:(</span><span class="no">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="n">indexPath</span> <span class="p">{</span>
+</span><span class='line'>  <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;cellForRowAtIndexPath %d&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">static</span> <span class="no">NSString</span> <span class="o">*</span><span class="no">MyIdentifier</span> <span class="o">=</span> <span class="err">@</span><span class="s2">&quot;customIdentifier&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">UITableViewCell</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="o">[</span><span class="n">tableView</span> <span class="ss">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="no">MyIdentifier</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">cell</span> <span class="o">==</span> <span class="kp">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">cell</span> <span class="o">=</span> <span class="o">[[</span><span class="no">CustomTableViewCell</span> <span class="n">alloc</span><span class="o">]</span> <span class="ss">initWithStyle</span><span class="p">:</span><span class="no">UITableViewCellStyleDefault</span>  <span class="ss">reuseIdentifier</span><span class="p">:</span><span class="no">MyIdentifier</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">cell</span> <span class="ss">isKindOfClass</span><span class="p">:</span><span class="o">[</span><span class="no">CustomTableViewCell</span> <span class="n">class</span><span class="o">]]</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="no">CustomTableViewCell</span> <span class="o">*</span><span class="n">customCell</span> <span class="o">=</span> <span class="p">(</span><span class="no">CustomTableViewCell</span> <span class="o">*</span><span class="p">)</span><span class="n">cell</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSData</span> <span class="o">*</span><span class="n">imageData</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">imageCache</span> <span class="ss">objectForKey</span><span class="p">:</span><span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;%d&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="o">]]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">imageData</span> <span class="o">!=</span> <span class="kp">nil</span><span class="p">){</span>
+</span><span class='line'>      <span class="n">customCell</span><span class="o">.</span><span class="n">customImageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="o">[</span><span class="no">UIImage</span> <span class="ss">imageWithData</span><span class="p">:</span><span class="n">imageData</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>      <span class="n">customCell</span><span class="o">.</span><span class="n">customImageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="o">[</span><span class="no">UIImage</span> <span class="ss">imageNamed</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;test1&quot;</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="no">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="p">(</span><span class="n">unsigned</span> <span class="n">long</span><span class="p">)</span> <span class="no">NULL</span><span class="p">),</span> <span class="o">^</span><span class="p">(</span><span class="n">void</span><span class="p">){</span>
+</span><span class='line'>        <span class="no">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span> <span class="n">getPictureFromServer</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">!=</span> <span class="kp">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="no">NSData</span> <span class="o">*</span><span class="n">tmpImageData</span> <span class="o">=</span> <span class="no">UIImagePNGRepresentation</span><span class="p">(</span><span class="n">image</span><span class="p">);</span>
+</span><span class='line'>          <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">imageCache</span> <span class="ss">setObject</span><span class="p">:</span><span class="n">tmpImageData</span> <span class="ss">forKey</span><span class="p">:</span><span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;%d&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="o">]]</span><span class="p">;</span>
+</span><span class='line'>          <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;download image for %d&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="o">[</span><span class="nb">self</span> <span class="ss">performSelectorOnMainThread</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="ss">reloadTableViewDataAtIndexPath</span><span class="p">:)</span> <span class="ss">withObject</span><span class="p">:</span><span class="n">indexPath</span> <span class="ss">waitUntilDone</span><span class="p">:</span><span class="no">NO</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>          <span class="sr">//</span> <span class="k">do</span> <span class="n">nothing</span> <span class="o">.</span><span class="n">.</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>    <span class="sr">//</span> <span class="k">do</span> <span class="n">nothing</span> <span class="o">.</span><span class="n">.</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>reloadTableViewDataAtIndexPath：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="ss">reloadTableViewDataAtIndexPath</span><span class="p">:(</span><span class="no">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="n">indexPath</span><span class="p">{</span>
+</span><span class='line'>  <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;MyWineViewController: in reload collection view data for index: %d&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">NSArray</span> <span class="o">*</span><span class="n">indexArray</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSArray</span> <span class="ss">arrayWithObjects</span><span class="p">:</span><span class="n">indexPath</span><span class="p">,</span> <span class="kp">nil</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationFade</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationAutomatic</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationBottom</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationLeft</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationMiddle</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationNone</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationRight</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="sr">//</span>    <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">myCustomTableView</span> <span class="ss">reloadRowsAtIndexPaths</span><span class="p">:</span><span class="n">indexArray</span> <span class="ss">withRowAnimation</span><span class="p">:</span><span class="no">UITableViewRowAnimationTop</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下载图片</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">UIImage</span> <span class="o">*</span><span class="p">)</span> <span class="n">getPictureFromServer</span><span class="p">{</span>
+</span><span class='line'>  <span class="no">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">NSString</span> <span class="o">*</span><span class="n">urlString</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;http://yourPicture&lt;span style=&quot;</span><span class="n">font</span><span class="o">-</span><span class="ss">family</span><span class="p">:</span> <span class="no">Arial</span><span class="p">,</span> <span class="no">Helvetica</span><span class="p">,</span> <span class="n">sans</span><span class="o">-</span><span class="n">serif</span><span class="p">;</span><span class="s2">&quot;&gt;.&lt;/span&gt;&lt;span style=&quot;</span><span class="n">font</span><span class="o">-</span><span class="ss">family</span><span class="p">:</span> <span class="no">Arial</span><span class="p">,</span> <span class="no">Helvetica</span><span class="p">,</span> <span class="n">sans</span><span class="o">-</span><span class="n">serif</span><span class="p">;</span><span class="s2">&quot;&gt;jpg&quot;</span><span class="o">]</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/span&gt;</span>
+</span><span class='line'><span class="sr">  </span>
+</span><span class='line'><span class="sr">  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];</span>
+</span><span class='line'><span class="sr">  [request setURL:[NSURL URLWithString:urlString]];</span>
+</span><span class='line'><span class="sr">  [request setHTTPMethod:@&quot;GET&quot;];</span>
+</span><span class='line'><span class="sr">  </span>
+</span><span class='line'><span class="sr">  NSURLResponse *response;</span>
+</span><span class='line'><span class="sr">  NSError *connectionError;</span>
+</span><span class='line'><span class="sr">  NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&amp;response error:&amp;connectionError];</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">  if (connectionError == NULL) {</span>
+</span><span class='line'><span class="sr">    NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];</span>
+</span><span class='line'><span class="sr">    NSLog(@&quot;getPictureFromServer - Response Status code: %ld&quot;, (long)statusCode);</span>
+</span><span class='line'><span class="sr">    </span>
+</span><span class='line'><span class="sr">    if (statusCode == 200) {</span>
+</span><span class='line'><span class="sr">      image = [UIImage imageWithData:returnData];</span>
+</span><span class='line'><span class="sr">    }</span>
+</span><span class='line'><span class="sr">    else{</span>
+</span><span class='line'><span class="sr">      /</span><span class="o">/</span> <span class="k">do</span> <span class="n">nothing</span><span class="o">.</span><span class="n">.</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>    <span class="sr">//</span> <span class="k">do</span> <span class="n">nothing</span><span class="o">.</span><span class="n">.</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>小结：通过上述两种方法都可以解决UITableView异步加载图片的问题，我也是因为图片异步加载的问题纠结了很久，所以就总结了这篇博文，希望能够帮助到其他人。</p>
+
+<p>原文：<a href="http://blog.csdn.net/willyang519/article/details/41833293">查看原文</a></p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ios扩展 | 永不言弃]]></title>
+  <link href="http://devcatin.github.io/blog/categories/ioskuo-zhan/atom.xml" rel="self"/>
+  <link href="http://devcatin.github.io/"/>
+  <updated>2015-04-17T17:50:43+08:00</updated>
+  <id>http://devcatin.github.io/</id>
+  <author>
+    <name><![CDATA[Grant]]></name>
+    <email><![CDATA[605435554@qq.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[IOS UITableView中异步加载图片]]></title>
+    <link href="http://devcatin.github.io/blog/2015/03/25/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian/"/>
+    <updated>2015-03-25T10:46:11+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/03/25/ios-uitableviewzhong-yi-bu-jia-zai-tu-pian</id>
+    <content type="html"><![CDATA[<p>在平时做项目时，经常会遇到关于UITableView加载网络图片的问题，一下是几种常用的解决方案：</p>
+
+<p>1.使用第三方类库：<a href="https://github.com/rs/SDWebImage">SDWebImage</a></p>
+
+<p>首先下载该类库，然后添加到自己的项目工程中，具体使用代码如下：</p>
+
+<!--more-->
+
+
+<pre><code class="ruby"> #import &lt;SDWebImage/UIImageView+WebCache.h&gt;
+ ...
+
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  static NSString *MyIdentifier = @"MyIdentifier";
+
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+
+  if (cell == nil)
+  {
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:MyIdentifier];
+  }
+
+  // Here we use the new provided setImageWithURL: method to load the web image
+  [cell.imageView setImageWithURL:[NSURL URLWithString:@"http://www.domain.com/path/to/image.jpg"]
+           placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+
+  cell.textLabel.text = @"My Text";
+  return cell;
+}
+</code></pre>
+
+<p>2.使用iOS自有的异步多线程，下载好图片后存入cache，再使用delegate函数更新tableview：</p>
+
+<ul>
+<li>(void)reloadRowsAtIndexPaths:(NSArray *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation</li>
+</ul>
+
+
+<p>初始化：</p>
+
+<pre><code>@interface ViewController ()
+
+@property (strong, nonatomic)  NSMutableArray *imageArray;
+@property (strong, nonatomic) NSCache *imageCache;
+@property (weak, nonatomic) IBOutlet UITableView *myCustomTableView;
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.imageCache = [[NSCache alloc] init];
+}
+</code></pre>
+
+<p>TableView delegate函数：</p>
+
+<pre><code>- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+  return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+  // Number of rows is the number of time zones in the region for the specified section.
+  return 32;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  NSLog(@"cellForRowAtIndexPath %d", indexPath.row);
+
+  static NSString *MyIdentifier = @"customIdentifier";
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+  if (cell == nil) {
+    cell = [[CustomTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:MyIdentifier];
+  }
+
+  if ([cell isKindOfClass:[CustomTableViewCell class]])
+  {
+    CustomTableViewCell *customCell = (CustomTableViewCell *)cell;
+    NSData *imageData = [self.imageCache objectForKey:[NSString stringWithFormat:@"%d", indexPath.row]];
+
+    if(imageData != nil){
+      customCell.customImageView.image = [UIImage imageWithData:imageData];
+    }
+    else{
+      customCell.customImageView.image = [UIImage imageNamed:@"test1"];
+
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, (unsigned long) NULL), ^(void){
+        UIImage *image = [self getPictureFromServer];
+
+        if (image != nil) {
+          NSData *tmpImageData = UIImagePNGRepresentation(image);
+          [self.imageCache setObject:tmpImageData forKey:[NSString stringWithFormat:@"%d", indexPath.row]];
+          NSLog(@"download image for %d", indexPath.row);
+
+          [self performSelectorOnMainThread:@selector(reloadTableViewDataAtIndexPath:) withObject:indexPath waitUntilDone:NO];
+        }
+        else{
+          // do nothing ..
+        }
+      });
+    }
+  }
+  else{
+    // do nothing ..
+  }
+
+  return cell;
+}
+</code></pre>
+
+<p>reloadTableViewDataAtIndexPath：</p>
+
+<pre><code>- (void) reloadTableViewDataAtIndexPath:(NSIndexPath *)indexPath{
+  NSLog(@"MyWineViewController: in reload collection view data for index: %d", indexPath.row);
+
+  NSArray *indexArray = [NSArray arrayWithObjects:indexPath, nil];
+  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationAutomatic];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationLeft];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationMiddle];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationRight];
+//  [self.myCustomTableView reloadRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
+}
+</code></pre>
+
+<p>下载图片</p>
+
+<pre><code>- (UIImage *) getPictureFromServer{
+  UIImage *image = nil;
+  NSString *urlString = [NSString stringWithFormat:@"http://yourPicture&lt;span style="font-family: Arial, Helvetica, sans-serif;"&gt;.&lt;/span&gt;&lt;span style="font-family: Arial, Helvetica, sans-serif;"&gt;jpg"];&lt;/span&gt;
+
+  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+  [request setURL:[NSURL URLWithString:urlString]];
+  [request setHTTPMethod:@"GET"];
+
+  NSURLResponse *response;
+  NSError *connectionError;
+  NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&amp;response error:&amp;connectionError];
+
+  if (connectionError == NULL) {
+    NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+    NSLog(@"getPictureFromServer - Response Status code: %ld", (long)statusCode);
+
+    if (statusCode == 200) {
+      image = [UIImage imageWithData:returnData];
+    }
+    else{
+      // do nothing..
+    }
+  }
+  else{
+    // do nothing..
+  }
+
+  return image;
+}
+</code></pre>
+
+<p>小结：通过上述两种方法都可以解决UITableView异步加载图片的问题，我也是因为图片异步加载的问题纠结了很久，所以就总结了这篇博文，希望能够帮助到其他人。</p>
+
+<p>原文：<a href="http://blog.csdn.net/willyang519/article/details/41833293">查看原文</a></p>
+]]></content>
+  </entry>
+  
+</feed>
