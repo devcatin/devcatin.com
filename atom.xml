@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:39:53+08:00</updated>
+  <updated>2015-04-17T17:41:01+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -15,10 +15,303 @@
   
   <entry>
     <title type="html"><![CDATA[IOS 开发技术点第1期]]></title>
-    <link href="http://devcatin.github.io/blog/2015/04/17/ios-kai-fa-ji-zhu-dian-di-1qi/"/>
-    <updated>2015-04-17T17:39:44+08:00</updated>
-    <id>http://devcatin.github.io/blog/2015/04/17/ios-kai-fa-ji-zhu-dian-di-1qi</id>
-    <content type="html"><![CDATA[
+    <link href="http://devcatin.github.io/blog/2015/02/04/ios-kai-fa-ji-zhu-dian-di-1qi/"/>
+    <updated>2015-02-04T14:09:48+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/02/04/ios-kai-fa-ji-zhu-dian-di-1qi</id>
+    <content type="html"><![CDATA[<p>以下是我工作中遇到的问题以及解决方案：</p>
+
+<!--more-->
+
+
+<h4>1.ios如何将文字转换成拼音</h4>
+
+<hr />
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">convertWithChinese</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">text</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="no">NSMutableString</span> <span class="o">*</span><span class="n">ms</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSMutableString</span> <span class="n">alloc</span><span class="o">]</span> <span class="ss">initWithString</span><span class="p">:</span><span class="n">text</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="k">if</span> <span class="p">(</span><span class="no">CFStringTransform</span><span class="p">((</span><span class="n">__bridge</span> <span class="no">CFMutableStringRef</span><span class="p">)</span><span class="n">ms</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kCFStringTransformMandarinLatin</span><span class="p">,</span> <span class="no">NO</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;pinyin: %@&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="p">);</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="p">}</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="k">if</span> <span class="p">(</span><span class="no">CFStringTransform</span><span class="p">((</span><span class="n">__bridge</span> <span class="no">CFMutableStringRef</span><span class="p">)</span><span class="n">ms</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kCFStringTransformStripDiacritics</span><span class="p">,</span> <span class="no">NO</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;pinyin: %@&quot;</span><span class="p">,</span> <span class="n">ms</span><span class="p">);</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="p">}</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="n">pinyinLab</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="o">[</span><span class="n">ms</span> <span class="n">copy</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="err"> </span> <span class="err"> </span> <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>2.ios开发之UIWebView</h4>
+
+<hr />
+
+<p>1).自动滑动到顶部</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">automaticSlidingToTheTop</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">_mWebView</span><span class="o">.</span><span class="n">subviews</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="no">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span> <span class="o">=</span> <span class="o">[</span><span class="n">_mWebView</span><span class="o">.</span><span class="n">subviews</span> <span class="ss">objectAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="err">    </span><span class="o">[</span><span class="n">scrollView</span> <span class="ss">setContentOffset</span><span class="p">:</span><span class="no">CGPointMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ss">animated</span><span class="p">:</span><span class="no">YES</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2).限制UIWebView左右滑动</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">limitSlidingAround</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="nb">id</span> <span class="n">subview</span> <span class="k">in</span> <span class="n">_mWebView</span><span class="o">.</span><span class="n">subviews</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>  <span class="err"> </span> <span class="err"> </span> <span class="k">if</span> <span class="p">(</span><span class="o">[[</span><span class="n">subview</span> <span class="n">class</span><span class="o">]</span> <span class="ss">isSubclassOfClass</span><span class="p">:</span><span class="o">[</span><span class="no">UIScrollView</span> <span class="n">class</span><span class="o">]]</span><span class="p">)</span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span>
+</span><span class='line'>  <span class="err"> </span> <span class="err"> </span> <span class="p">{</span>
+</span><span class='line'>  <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="p">((</span><span class="no">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="n">subview</span><span class="p">)</span><span class="o">.</span><span class="n">bounces</span> <span class="o">=</span> <span class="no">NO</span><span class="p">;</span>
+</span><span class='line'>  <span class="err"> </span> <span class="err">  </span><span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>3.ios开发之AFNetWorking同步和异步</h4>
+
+<hr />
+
+<p>1)同步</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">requestFromServer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="no">NSString</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;%@/s/account/find-user/&quot;</span><span class="p">,</span><span class="no">ServerBaseURL</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">NSMutableDictionary</span> <span class="o">*</span><span class="n">requestParms</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSMutableDictionary</span> <span class="n">alloc</span><span class="o">]</span> <span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">requestParms</span> <span class="ss">setObject</span><span class="p">:</span><span class="n">userID</span> <span class="ss">forKey</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;userId&quot;</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">AFJSONRequestSerializer</span> <span class="o">*</span><span class="n">requestSerializer</span><span class="err"> </span><span class="o">=</span> <span class="o">[</span><span class="no">AFJSONRequestSerializer</span> <span class="n">serializer</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">NSMutableURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="o">[</span><span class="n">requestSerializer</span> <span class="ss">requestWithMethod</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;POST&quot;</span> <span class="ss">URLString</span><span class="p">:</span><span class="n">url</span> <span class="ss">parameters</span><span class="p">:</span><span class="n">requestParms</span> <span class="ss">error</span><span class="p">:</span><span class="kp">nil</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">AFHTTPRequestOperation</span> <span class="o">*</span><span class="n">requestOperation</span> <span class="o">=</span> <span class="o">[[</span><span class="no">AFHTTPRequestOperation</span> <span class="n">alloc</span><span class="o">]</span> <span class="ss">initWithRequest</span><span class="p">:</span><span class="n">request</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">AFHTTPResponseSerializer</span><span class="err"> </span><span class="o">*</span><span class="n">responseSerializer</span> <span class="o">=</span> <span class="o">[</span><span class="no">AFJSONResponseSerializer</span><span class="err"> </span><span class="n">serializer</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">requestOperation</span> <span class="ss">setResponseSerializer</span><span class="p">:</span><span class="n">responseSerializer</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">requestOperation</span> <span class="n">start</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">requestOperation</span> <span class="n">waitUntilFinished</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">NSDictionary</span> <span class="o">*</span><span class="n">userInfo</span> <span class="o">=</span> <span class="o">[[</span><span class="n">requestOperation</span> <span class="n">responseObject</span><span class="o">]</span> <span class="ss">objectForKey</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;user”];</span>
+</span><span class='line'><span class="s2">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2).异步</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">requestFromServer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="no">NSString</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;%@/s/account/signin/&quot;</span><span class="p">,</span> <span class="no">ServerBaseURL</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="no">NSMutableDictionary</span> <span class="o">*</span><span class="n">requestParms</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSMutableDictionary</span> <span class="n">alloc</span><span class="o">]</span> <span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="sr">//</span><span class="err">设置参数</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">requestParms</span> <span class="ss">setObject</span><span class="p">:</span><span class="n">loginName</span> <span class="ss">forKey</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;loginname&quot;</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">httpManager</span> <span class="ss">POST</span><span class="p">:</span><span class="n">url</span> <span class="ss">parameters</span><span class="p">:</span><span class="n">requestParms</span>
+</span><span class='line'><span class="err">    </span><span class="ss">success</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="no">AFHTTPRequestOperation</span> <span class="o">*</span><span class="n">operation</span><span class="p">,</span> <span class="nb">id</span> <span class="n">responseObject</span><span class="p">)</span>
+</span><span class='line'><span class="err">    </span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span><span class="err">成功</span>
+</span><span class='line'>  <span class="p">}</span> <span class="ss">failure</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="no">AFHTTPRequestOperation</span> <span class="o">*</span><span class="n">operation</span><span class="p">,</span> <span class="no">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span><span class="err">失败</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4.iphone 屏幕尺寸:</h4>
+
+<hr />
+
+<p>iphone 4/4s   : 320x480、640x960</p>
+
+<p>iphone 5/5s   : 320x568、640x1136</p>
+
+<p>iphone 6      : 375x667、750x1334</p>
+
+<p>iphone 6 plus : 414x736、1242x2208</p>
+
+<p>icon:29,29@2x,29@3x,40,40@2x,40@3x,60@2x,60@3x,76,76@2x(iphone和ipad)</p>
+
+<h4>5.ios中arc和非arc模式混用</h4>
+
+<hr />
+
+<p>Xcode 项目中我们可以使用 ARC 和非 ARC 的混合模式。
+如果你的项目使用的非 ARC 模式，则为 ARC 模式的代码文件加入 -fobjc-arc 标签。
+如果你的项目使用的是 ARC 模式，则为非 ARC 模式的代码文件加入 -fno-objc-arc 标签。
+添加标签的方法：
+    1). 打开：你的target -> Build Phases -> Compile Sources.
+    2). 双击对应的 *.m 文件
+    3). 在弹出窗口中输入上面提到的标签 -fobjc-arc / -fno-objc-arc
+    4). 点击 done 保存</p>
+
+<h4>6.ios开发之计时器</h4>
+
+<hr />
+
+<p>1).使用GCD实现倒计时</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">countDownTimer</span><span class="p">:(</span><span class="nb">id</span><span class="p">)</span><span class="n">btn</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">__block</span> <span class="n">int</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60</span><span class="p">;</span><span class="o">//</span><span class="err">倒计时时间</span>
+</span><span class='line'>    <span class="n">dispatch_queue_t</span> <span class="n">queue</span> <span class="o">=</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="no">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">dispatch_source_t</span> <span class="n">_timer</span> <span class="o">=</span> <span class="n">dispatch_source_create</span><span class="p">(</span><span class="no">DISPATCH_SOURCE_TYPE_TIMER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">queue</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">dispatch_source_set_timer</span><span class="p">(</span><span class="n">_timer</span><span class="p">,</span> <span class="n">dispatch_walltime</span><span class="p">(</span><span class="no">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span> <span class="o">*</span> <span class="no">NSEC_PER_SEC</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span><span class="o">//</span><span class="err">每秒执行</span>
+</span><span class='line'>    <span class="n">dispatch_source_set_event_handler</span><span class="p">(</span><span class="n">_timer</span><span class="p">,</span> <span class="o">^</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="sr">//</span><span class="err">倒计时结束，关闭</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">timeout</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">dispatch_source_cancel</span><span class="p">(</span><span class="n">_timer</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">dispatch_release</span><span class="p">(</span><span class="n">_timer</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="sr">//</span><span class="err">根据自己的需要，设置界面的按钮显示</span>
+</span><span class='line'>                <span class="o">[</span><span class="n">btn</span> <span class="ss">setTitle</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;获取验证码&quot;</span> <span class="ss">forState</span><span class="p">:</span><span class="no">UIControlStateNormal</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="no">NSString</span> <span class="o">*</span><span class="n">strTime</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSString</span> <span class="ss">stringWithFormat</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;%d秒&quot;</span><span class="p">,</span><span class="n">timeout</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="sr">//</span><span class="err">根据自己的需要，设置界面的按钮显示</span>
+</span><span class='line'>                <span class="o">[</span><span class="n">btn</span> <span class="ss">setTitle</span><span class="p">:</span><span class="n">strTime</span> <span class="ss">forState</span><span class="p">:</span><span class="no">UIControlStateNormal</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">});</span>
+</span><span class='line'>                <span class="n">timeout</span> <span class="o">--</span><span class="p">;</span>
+</span><span class='line'>             <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">dispatch_resume</span><span class="p">(</span><span class="n">_timer</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2).使用NSTimer来实现</p>
+
+<p>    主要使用的是NSTimer的scheduledTimerWithTimeInterval方法来每1秒执行一次timeFireMethod函数，timeFireMethod进行倒计时的一些操作，完成时把timer给invalidate掉就ok了，代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">timer</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">secondsCountDown</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="mi">60</span><span class="p">;</span><span class="o">//</span><span class="mi">60</span><span class="err">秒倒计时</span>
+</span><span class='line'>  <span class="n">countDownTimer</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="o">[</span><span class="no">NSTimer</span><span class="err"> </span><span class="ss">scheduledTimerWithTimeInterval</span><span class="p">:</span><span class="ss">target</span><span class="p">:</span><span class="nb">self</span><span class="err"> </span><span class="ss">selector</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="n">timeFireMethod</span><span class="p">)</span><span class="err"> </span><span class="ss">userInfo</span><span class="p">:</span><span class="kp">nil</span><span class="err"> </span><span class="ss">repeats</span><span class="p">:</span><span class="no">YES</span><span class="o">]</span><span class="p">;</span><span class="err">  </span>
+</span><span class='line'>  <span class="o">[</span><span class="nb">self</span> <span class="n">timeFireMethod</span><span class="o">]</span>
+</span><span class='line'><span class="p">}</span><span class="err"> </span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">timeFireMethod</span>
+</span><span class='line'><span class="p">{</span><span class="err">  </span>
+</span><span class='line'><span class="err">    </span><span class="n">secondsCountDown</span><span class="o">--</span><span class="p">;</span><span class="err">  </span>
+</span><span class='line'><span class="err">    </span><span class="k">if</span><span class="p">(</span><span class="n">secondsCountDown</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="err">    </span><span class="p">{</span><span class="err">  </span>
+</span><span class='line'><span class="err">    </span> <span class="o">[</span><span class="n">countDownTimer</span><span class="err"> </span><span class="n">invalidate</span><span class="o">]</span><span class="p">;</span><span class="err">  </span>
+</span><span class='line'><span class="err">    </span><span class="p">}</span><span class="err">  </span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>小结:针对以上的这点小技术点，有些让我纠结了很长时间，现在好了，都给解决了，所以我想这些对大家来说也是需要知道的。</p>
 ]]></content>
   </entry>
   
