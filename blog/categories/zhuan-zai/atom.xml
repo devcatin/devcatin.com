@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 转载 | 永不言弃]]></title>
   <link href="http://devcatin.github.io/blog/categories/zhuan-zai/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T14:16:17+08:00</updated>
+  <updated>2015-04-17T14:39:38+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -45,8 +45,8 @@
 
 <p>例子如下，在 Markdown 文件里加上一段 HTML 表格：</p>
 
-<pre>
-这是一个普通段落。
+<p>&#8220;`
+这是一个普通段落。</p>
 
 <table>
     <tr>
@@ -54,9 +54,10 @@
     </tr>
 </table>
 
-这是另一个普通段落。
-</pre>
 
+<p>这是另一个普通段落。</p>
+
+<p>&#8220;`</p>
 
 <p>请注意，在 HTML 区块标签间的 Markdown 格式语法将不会被处理。比如，你在 HTML 区块内使用 Markdown 样式的<em>强调</em>会没有效果。</p>
 
