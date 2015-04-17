@@ -7,6 +7,12 @@ FileUtils.mkdir_p(PYGMENTS_CACHE_DIR)
 
 module HighlightCode
   def self.highlight(str, lang)
+  
+  # Next three lines let us see what pygments "thinks".
+  #print "\n\nrth_str = #{str}"
+  #print "\nrth_lang = #{lang}"
+  #print "\nrth_file = #{__FILE__}\n\n"
+  
     lang = 'ruby' if lang == 'ru'
     lang = 'objc' if lang == 'm'
     lang = 'perl' if lang == 'pl'
