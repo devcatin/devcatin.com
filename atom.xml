@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T13:20:49+08:00</updated>
+  <updated>2015-04-17T13:24:43+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[利用Octopress搭建一个Github博客]]></title>
+    <link href="http://devcatin.github.io/blog/2015/04/17/li-yong-octopressda-jian-%5B%3F%5D-ge-githubbo-ke/"/>
+    <updated>2015-04-17T13:24:26+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/04/17/li-yong-octopressda-jian-[?]-ge-githubbo-ke</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
