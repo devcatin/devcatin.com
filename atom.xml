@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-17T17:41:01+08:00</updated>
+  <updated>2015-04-17T17:42:44+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UIDynamic(捕捉行为)]]></title>
+    <link href="http://devcatin.github.io/blog/2015/04/17/uidynamic-bu-zhuo-xing-wei/"/>
+    <updated>2015-04-17T17:41:49+08:00</updated>
+    <id>http://devcatin.github.io/blog/2015/04/17/uidynamic-bu-zhuo-xing-wei</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS 开发技术点第1期]]></title>
