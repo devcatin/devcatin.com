@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ios探索 | 永不言弃]]></title>
   <link href="http://devcatin.github.io/blog/categories/iostan-suo/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-28T17:41:33+08:00</updated>
+  <updated>2015-04-28T17:43:54+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -67,7 +67,7 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>1).方式一是使用NSInvocationOperation，具体实例如下:</p>
 
-<pre><code>#import "ViewController.h"  
+<pre><code class="ruby">#import "ViewController.h"  
 #define kURL @"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"  
 
 @interface ViewController ()  

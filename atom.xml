@@ -4,7 +4,7 @@
   <title><![CDATA[永不言弃]]></title>
   <link href="http://devcatin.github.io/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-28T17:41:33+08:00</updated>
+  <updated>2015-04-28T17:43:54+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -379,7 +379,7 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>1).方式一是使用NSInvocationOperation，具体实例如下:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -410,37 +410,38 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#import "ViewController.h"  
-</span><span class='line'>#define kURL @"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"  
-</span><span class='line'>  
-</span><span class='line'>@interface ViewController ()  
-</span><span class='line'>  
-</span><span class='line'>@end  
-</span><span class='line'>  
-</span><span class='line'>@implementation ViewController  
-</span><span class='line'>  
-</span><span class='line'>- (void)viewDidLoad  
-</span><span class='line'>{  
-</span><span class='line'>    [super viewDidLoad];  
-</span><span class='line'>    NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self  
-</span><span class='line'>                                                                           selector:@selector(downloadImage:)  
-</span><span class='line'>                                                                             object:kURL];  
-</span><span class='line'>      
-</span><span class='line'>    NSOperationQueue *queue = [[NSOperationQueue alloc]init];  
-</span><span class='line'>    [queue addOperation:operation];  
-</span><span class='line'>    // Do any additional setup after loading the view, typically from a nib.  
-</span><span class='line'>}  
-</span><span class='line'>  
-</span><span class='line'>-(void)downloadImage:(NSString *)url{  
-</span><span class='line'>    NSLog(@"url:%@", url);  
-</span><span class='line'>    NSURL *nsUrl = [NSURL URLWithString:url];  
-</span><span class='line'>    NSData *data = [[NSData alloc]initWithContentsOfURL:nsUrl];  
-</span><span class='line'>    UIImage * image = [[UIImage alloc]initWithData:data];  
-</span><span class='line'>    [self performSelectorOnMainThread:@selector(updateUI:) withObject:image waitUntilDone:YES];  
-</span><span class='line'>}  
-</span><span class='line'>-(void)updateUI:(UIImage*) image{  
-</span><span class='line'>    self.imageView.image = image;  
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#import &quot;ViewController.h&quot;  </span>
+</span><span class='line'><span class="c1">#define kURL @&quot;http://avatar.csdn.net/2/C/D/1_totogo2010.jpg&quot;  </span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@interface</span> <span class="no">ViewController</span> <span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@implementation</span> <span class="no">ViewController</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="o">[</span><span class="k">super</span> <span class="n">viewDidLoad</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSInvocationOperation</span> <span class="o">*</span><span class="n">operation</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSInvocationOperation</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithTarget</span><span class="p">:</span><span class="nb">self</span>
+</span><span class='line'>                                                                           <span class="ss">selector</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="ss">downloadImage</span><span class="p">:)</span>
+</span><span class='line'>                                                                             <span class="ss">object</span><span class="p">:</span><span class="n">kURL</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">NSOperationQueue</span> <span class="o">*</span><span class="n">queue</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSOperationQueue</span> <span class="n">alloc</span><span class="o">]</span><span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">[</span><span class="n">queue</span> <span class="ss">addOperation</span><span class="p">:</span><span class="n">operation</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="sr">//</span> <span class="no">Do</span> <span class="n">any</span> <span class="n">additional</span> <span class="n">setup</span> <span class="n">after</span> <span class="n">loading</span> <span class="n">the</span> <span class="n">view</span><span class="p">,</span> <span class="n">typically</span> <span class="n">from</span> <span class="n">a</span> <span class="n">nib</span><span class="o">.</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">downloadImage</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">url</span><span class="p">{</span>
+</span><span class='line'>    <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;url:%@&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">);</span>
+</span><span class='line'>    <span class="no">NSURL</span> <span class="o">*</span><span class="n">nsUrl</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSURL</span> <span class="ss">URLWithString</span><span class="p">:</span><span class="n">url</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSData</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithContentsOfURL</span><span class="p">:</span><span class="n">nsUrl</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">UIImage</span> <span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UIImage</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithData</span><span class="p">:</span><span class="n">data</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">[</span><span class="nb">self</span> <span class="ss">performSelectorOnMainThread</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="ss">updateUI</span><span class="p">:)</span> <span class="ss">withObject</span><span class="p">:</span><span class="n">image</span> <span class="ss">waitUntilDone</span><span class="p">:</span><span class="no">YES</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">updateUI</span><span class="p">:(</span><span class="no">UIImage</span><span class="o">*</span><span class="p">)</span> <span class="n">image</span><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">imageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>注解：a.viewDidLoad方法里可以看到我们用NSInvocationOperation建了一个后台线程，并且放到NSOperationQueue中。后台线程执行downloadImage方法。</p>
@@ -454,25 +455,26 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <p>编写一个NSOperation的子类，只需实现main方法。这里非常类似Java的Thread，你可以继承它，并覆盖run方法，在该方法里面写入需要执行的代码。这里的main方法和run方法作用是相似的。
 头文件：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@interface MyTask : NSOperation { 
-</span><span class='line'>    int operationId; 
-</span><span class='line'>}
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@interface</span> <span class="no">MyTask</span> <span class="p">:</span> <span class="no">NSOperation</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">int</span> <span class="n">operationId</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>@property int operationId;
+</span><span class='line'><span class="vi">@property</span> <span class="n">int</span> <span class="n">operationId</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="vi">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这里的operationId属性不是必须的，是我想在后面标识区分多个Task的标识位。m文件：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -483,22 +485,23 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation MyTask
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@implementation</span> <span class="no">MyTask</span>
 </span><span class='line'>
-</span><span class='line'>@synthesize operationId;
+</span><span class='line'><span class="vi">@synthesize</span> <span class="n">operationId</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>- (void)main{ 
-</span><span class='line'>    NSLog(@"task %i run … ",operationId); 
-</span><span class='line'>    [NSThread sleepForTimeInterval:10]; 
-</span><span class='line'>    NSLog(@"task %i is finished. ",operationId); 
-</span><span class='line'>}
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">main</span><span class="p">{</span>
+</span><span class='line'>    <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;task %i run … &quot;</span><span class="p">,</span><span class="n">operationId</span><span class="p">);</span>
+</span><span class='line'>    <span class="o">[</span><span class="no">NSThread</span> <span class="ss">sleepForTimeInterval</span><span class="p">:</span><span class="mi">10</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;task %i is finished. &quot;</span><span class="p">,</span><span class="n">operationId</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="vi">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>这里模拟了一个耗时10秒钟的操作。下面需要把Task加入到队列中：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -508,16 +511,17 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)viewDidLoad { 
-</span><span class='line'>    [super viewDidLoad]; 
-</span><span class='line'>    queue=[[NSOperationQueue alloc] init]; 
-</span><span class='line'>    
-</span><span class='line'>    int index=1; 
-</span><span class='line'>    MyTask *task=[[MyTask alloc] init]; 
-</span><span class='line'>    task.operationId=index++; 
-</span><span class='line'>         
-</span><span class='line'>    [queue addOperation:task];
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">viewDidLoad</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">[</span><span class="k">super</span> <span class="n">viewDidLoad</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">queue</span><span class="o">=[[</span><span class="no">NSOperationQueue</span> <span class="n">alloc</span><span class="o">]</span> <span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">int</span> <span class="n">index</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">MyTask</span> <span class="o">*</span><span class="n">task</span><span class="o">=[[</span><span class="no">MyTask</span> <span class="n">alloc</span><span class="o">]</span> <span class="n">init</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">task</span><span class="o">.</span><span class="n">operationId</span><span class="o">=</span><span class="n">index</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">[</span><span class="n">queue</span> <span class="ss">addOperation</span><span class="p">:</span><span class="n">task</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>运行结果是，界面出现了，而task还未执行完，说明是多线程的。10秒钟后，日志打印完毕.</p>
@@ -531,7 +535,7 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>b.队列的取消，暂停和恢复</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -544,19 +548,20 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> //取消队列的所有操作
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="sr">//</span><span class="err">取消队列的所有操作</span>
 </span><span class='line'>
-</span><span class='line'> - (void)cancelAllOperations;
+</span><span class='line'> <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">cancelAllOperations</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>提⽰:也可以调用NSOperation的- (void)cancel⽅法取消单个操作
+</span><span class='line'><span class="err">提⽰</span><span class="p">:</span><span class="err">也可以调用</span><span class="no">NSOperation</span><span class="err">的</span><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">cancel</span><span class="err">⽅法取消单个操作</span>
 </span><span class='line'>
-</span><span class='line'> //暂停和恢复队列
+</span><span class='line'> <span class="sr">//</span><span class="err">暂停和恢复队列</span>
 </span><span class='line'>
-</span><span class='line'>- (void)setSuspended:(BOOL)b; // YES代表暂停队列,NO代表恢复队列
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">setSuspended</span><span class="p">:(</span><span class="no">BOOL</span><span class="p">)</span><span class="n">b</span><span class="p">;</span> <span class="sr">//</span> <span class="no">YES</span><span class="err">代表暂停队列</span><span class="p">,</span><span class="no">NO</span><span class="err">代表恢复队列</span>
 </span><span class='line'>
-</span><span class='line'>- (BOOL)isSuspended; //当前状态
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span><span class="n">isSuspended</span><span class="p">;</span> <span class="sr">//</span><span class="err">当前状态</span>
 </span><span class='line'>
-</span><span class='line'>//暂停和恢复的适用场合：在tableview界面，开线程下载远程的网络界面，对UI会有影响，使用户体验变差。那么这种情况，就可以设置在用户操作UI（如滚动屏幕）的时候，暂停队列（不是取消队列），停止滚动的时候，恢复队列。</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="sr">//</span><span class="err">暂停和恢复的适用场合：在</span><span class="n">tableview</span><span class="err">界面，开线程下载远程的网络界面，对</span><span class="no">UI</span><span class="err">会有影响，使用户体验变差。那么这种情况，就可以设置在用户操作</span><span class="no">UI</span><span class="err">（如滚动屏幕）的时候，暂停队列（不是取消队列），停止滚动的时候，恢复队列。</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>3.GCD:Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
@@ -581,7 +586,7 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>GCD的用法：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -636,61 +641,62 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>53</span>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//  后台执行：
-</span><span class='line'> dispatch_async(dispatch_get_global_queue(0, 0), ^{
-</span><span class='line'>      // something
-</span><span class='line'> });
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sr">//</span>  <span class="err">后台执行：</span>
+</span><span class='line'> <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="n">something</span>
+</span><span class='line'> <span class="p">});</span>
 </span><span class='line'>
-</span><span class='line'> // 主线程执行：
-</span><span class='line'> dispatch_async(dispatch_get_main_queue(), ^{
-</span><span class='line'>      // something
-</span><span class='line'> });
+</span><span class='line'> <span class="sr">//</span> <span class="err">主线程执行：</span>
+</span><span class='line'> <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="n">something</span>
+</span><span class='line'> <span class="p">});</span>
 </span><span class='line'>
-</span><span class='line'> // 一次性执行：
-</span><span class='line'> static dispatch_once_t onceToken;
-</span><span class='line'> dispatch_once(&onceToken, ^{
-</span><span class='line'>     // code to be executed once
-</span><span class='line'> });
+</span><span class='line'> <span class="sr">//</span> <span class="err">一次性执行：</span>
+</span><span class='line'> <span class="n">static</span> <span class="n">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+</span><span class='line'> <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>     <span class="sr">//</span> <span class="n">code</span> <span class="n">to</span> <span class="n">be</span> <span class="n">executed</span> <span class="n">once</span>
+</span><span class='line'> <span class="p">});</span>
 </span><span class='line'>
-</span><span class='line'> // 延迟2秒执行：
-</span><span class='line'> double delayInSeconds = 2.0;
-</span><span class='line'> dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-</span><span class='line'> dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-</span><span class='line'>     // code to be executed on the main queue after delay
-</span><span class='line'> });
+</span><span class='line'> <span class="sr">//</span> <span class="err">延迟</span><span class="mi">2</span><span class="err">秒执行：</span>
+</span><span class='line'> <span class="n">double</span> <span class="n">delayInSeconds</span> <span class="o">=</span> <span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'> <span class="n">dispatch_time_t</span> <span class="n">popTime</span> <span class="o">=</span> <span class="n">dispatch_time</span><span class="p">(</span><span class="no">DISPATCH_TIME_NOW</span><span class="p">,</span> <span class="n">delayInSeconds</span> <span class="o">*</span> <span class="no">NSEC_PER_SEC</span><span class="p">);</span>
+</span><span class='line'> <span class="n">dispatch_after</span><span class="p">(</span><span class="n">popTime</span><span class="p">,</span> <span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">(</span><span class="n">void</span><span class="p">){</span>
+</span><span class='line'>     <span class="sr">//</span> <span class="n">code</span> <span class="n">to</span> <span class="n">be</span> <span class="n">executed</span> <span class="n">on</span> <span class="n">the</span> <span class="n">main</span> <span class="n">queue</span> <span class="n">after</span> <span class="n">delay</span>
+</span><span class='line'> <span class="p">});</span>
 </span><span class='line'>
-</span><span class='line'> // 自定义dispatch_queue_t
-</span><span class='line'> dispatch_queue_t urls_queue = dispatch_queue_create("blog.devtang.com", NULL);
-</span><span class='line'> dispatch_async(urls_queue, ^{  
-</span><span class='line'>　 　// your code 
-</span><span class='line'> });
-</span><span class='line'> dispatch_release(urls_queue);
+</span><span class='line'> <span class="sr">//</span> <span class="err">自定义</span><span class="n">dispatch_queue_t</span>
+</span><span class='line'> <span class="n">dispatch_queue_t</span> <span class="n">urls_queue</span> <span class="o">=</span> <span class="n">dispatch_queue_create</span><span class="p">(</span><span class="s2">&quot;blog.devtang.com&quot;</span><span class="p">,</span> <span class="no">NULL</span><span class="p">);</span>
+</span><span class='line'> <span class="n">dispatch_async</span><span class="p">(</span><span class="n">urls_queue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'><span class="err">　</span> <span class="err">　</span><span class="o">//</span> <span class="n">your</span> <span class="n">code</span>
+</span><span class='line'> <span class="p">});</span>
+</span><span class='line'> <span class="n">dispatch_release</span><span class="p">(</span><span class="n">urls_queue</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'> // 合并汇总结果
-</span><span class='line'> dispatch_group_t group = dispatch_group_create();
-</span><span class='line'> dispatch_group_async(group, dispatch_get_global_queue(0,0), ^{
-</span><span class='line'>      // 并行执行的线程一
-</span><span class='line'> });
-</span><span class='line'> dispatch_group_async(group, dispatch_get_global_queue(0,0), ^{
-</span><span class='line'>      // 并行执行的线程二
-</span><span class='line'> });
-</span><span class='line'> dispatch_group_notify(group, dispatch_get_global_queue(0,0), ^{
-</span><span class='line'>      // 汇总结果
-</span><span class='line'> });
-</span><span class='line'> ```
-</span><span class='line'> 一个应用GCD的例子:
-</span><span class='line'> 
-</span><span class='line'> ```
-</span><span class='line'> dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{   
-</span><span class='line'>    NSURL * url = [NSURL URLWithString:@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"];   
-</span><span class='line'>    NSData * data = [[NSData alloc]initWithContentsOfURL:url];   
-</span><span class='line'>    UIImage *image = [[UIImage alloc]initWithData:data];   
-</span><span class='line'>    if (data != nil) {   
-</span><span class='line'>        dispatch_async(dispatch_get_main_queue(), ^{   
-</span><span class='line'>            self.imageView.image = image;   
-</span><span class='line'>         });   
-</span><span class='line'>    }   
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'> <span class="sr">//</span> <span class="err">合并汇总结果</span>
+</span><span class='line'> <span class="n">dispatch_group_t</span> <span class="n">group</span> <span class="o">=</span> <span class="n">dispatch_group_create</span><span class="p">();</span>
+</span><span class='line'> <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="err">并行执行的线程一</span>
+</span><span class='line'> <span class="p">});</span>
+</span><span class='line'> <span class="n">dispatch_group_async</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="err">并行执行的线程二</span>
+</span><span class='line'> <span class="p">});</span>
+</span><span class='line'> <span class="n">dispatch_group_notify</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="err">汇总结果</span>
+</span><span class='line'> <span class="p">});</span>
+</span><span class='line'> <span class="sb">```</span>
+</span><span class='line'><span class="sb"> 一个应用GCD的例子:</span>
+</span><span class='line'><span class="sb"> </span>
+</span><span class='line'><span class="sb"> ```</span>
+</span><span class='line'> <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="no">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="no">NSURL</span> <span class="o">*</span> <span class="n">url</span> <span class="o">=</span> <span class="o">[</span><span class="no">NSURL</span> <span class="ss">URLWithString</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;http://avatar.csdn.net/2/C/D/1_totogo2010.jpg&quot;</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">NSData</span> <span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="o">[[</span><span class="no">NSData</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithContentsOfURL</span><span class="p">:</span><span class="n">url</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="no">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UIImage</span> <span class="n">alloc</span><span class="o">]</span><span class="ss">initWithData</span><span class="p">:</span><span class="n">data</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="kp">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>            <span class="nb">self</span><span class="o">.</span><span class="n">imageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">;</span>
+</span><span class='line'>         <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>GCD的另一个用处是可以让程序在后台较长久的运行。</p>
@@ -699,7 +705,7 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>让程序在后台长久运行的示例代码如下：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -722,29 +728,30 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// AppDelegate.h文件
-</span><span class='line'>@property (assign, nonatomic) UIBackgroundTaskIdentifier backgroundUpdateTask;
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sr">//</span> <span class="no">AppDelegate</span><span class="o">.</span><span class="n">h</span><span class="err">文件</span>
+</span><span class='line'><span class="vi">@property</span> <span class="p">(</span><span class="n">assign</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="no">UIBackgroundTaskIdentifier</span> <span class="n">backgroundUpdateTask</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>// AppDelegate.m文件
-</span><span class='line'>- (void)applicationDidEnterBackground:(UIApplication *)application
-</span><span class='line'>{
-</span><span class='line'>    [self beingBackgroundUpdateTask];
-</span><span class='line'>    // 在这里加上你需要长久运行的代码
-</span><span class='line'>    [self endBackgroundUpdateTask];
-</span><span class='line'>}
+</span><span class='line'><span class="sr">//</span> <span class="no">AppDelegate</span><span class="o">.</span><span class="n">m</span><span class="err">文件</span>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="ss">applicationDidEnterBackground</span><span class="p">:(</span><span class="no">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="o">[</span><span class="nb">self</span> <span class="n">beingBackgroundUpdateTask</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="sr">//</span> <span class="err">在这里加上你需要长久运行的代码</span>
+</span><span class='line'>    <span class="o">[</span><span class="nb">self</span> <span class="n">endBackgroundUpdateTask</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>- (void)beingBackgroundUpdateTask
-</span><span class='line'>{
-</span><span class='line'>    self.backgroundUpdateTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-</span><span class='line'>        [self endBackgroundUpdateTask];
-</span><span class='line'>    }];
-</span><span class='line'>}
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">beingBackgroundUpdateTask</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">backgroundUpdateTask</span> <span class="o">=</span> <span class="o">[[</span><span class="no">UIApplication</span> <span class="n">sharedApplication</span><span class="o">]</span> <span class="ss">beginBackgroundTaskWithExpirationHandler</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+</span><span class='line'>        <span class="o">[</span><span class="nb">self</span> <span class="n">endBackgroundUpdateTask</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>- (void)endBackgroundUpdateTask
-</span><span class='line'>{
-</span><span class='line'>    [[UIApplication sharedApplication] endBackgroundTask: self.backgroundUpdateTask];
-</span><span class='line'>    self.backgroundUpdateTask = UIBackgroundTaskInvalid;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">endBackgroundUpdateTask</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="o">[[</span><span class="no">UIApplication</span> <span class="n">sharedApplication</span><span class="o">]</span> <span class="ss">endBackgroundTask</span><span class="p">:</span> <span class="nb">self</span><span class="o">.</span><span class="n">backgroundUpdateTask</span><span class="o">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">backgroundUpdateTask</span> <span class="o">=</span> <span class="no">UIBackgroundTaskInvalid</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>
