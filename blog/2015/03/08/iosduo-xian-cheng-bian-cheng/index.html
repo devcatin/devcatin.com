@@ -132,6 +132,188 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 
 <p>使用 NSOperation的方式有两种，一种是用定义好的两个子类：NSInvocationOperation 和 NSBlockOperation；另一种是继承NSOperation。</p>
 
+<p>1).方式一是使用NSInvocationOperation，具体实例如下:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import "ViewController.h"  
+</span><span class='line'>#define kURL @"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"  
+</span><span class='line'>  
+</span><span class='line'>@interface ViewController ()  
+</span><span class='line'>  
+</span><span class='line'>@end  
+</span><span class='line'>  
+</span><span class='line'>@implementation ViewController  
+</span><span class='line'>  
+</span><span class='line'>- (void)viewDidLoad  
+</span><span class='line'>{  
+</span><span class='line'>    [super viewDidLoad];  
+</span><span class='line'>    NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self  
+</span><span class='line'>                                                                           selector:@selector(downloadImage:)  
+</span><span class='line'>                                                                             object:kURL];  
+</span><span class='line'>      
+</span><span class='line'>    NSOperationQueue *queue = [[NSOperationQueue alloc]init];  
+</span><span class='line'>    [queue addOperation:operation];  
+</span><span class='line'>    // Do any additional setup after loading the view, typically from a nib.  
+</span><span class='line'>}  
+</span><span class='line'>  
+</span><span class='line'>-(void)downloadImage:(NSString *)url{  
+</span><span class='line'>    NSLog(@"url:%@", url);  
+</span><span class='line'>    NSURL *nsUrl = [NSURL URLWithString:url];  
+</span><span class='line'>    NSData *data = [[NSData alloc]initWithContentsOfURL:nsUrl];  
+</span><span class='line'>    UIImage * image = [[UIImage alloc]initWithData:data];  
+</span><span class='line'>    [self performSelectorOnMainThread:@selector(updateUI:) withObject:image waitUntilDone:YES];  
+</span><span class='line'>}  
+</span><span class='line'>-(void)updateUI:(UIImage*) image{  
+</span><span class='line'>    self.imageView.image = image;  
+</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+
+
+<p>注解：a.viewDidLoad方法里可以看到我们用NSInvocationOperation建了一个后台线程，并且放到NSOperationQueue中。后台线程执行downloadImage方法。</p>
+
+<p>b.downloadImage 方法处理下载图片的逻辑。下载完成后用performSelectorOnMainThread执行主线程updateUI方法。</p>
+
+<p>c.updateUI 并把下载的图片显示到图片控件中。</p>
+
+<p>2).方式二是继承NSOperation：在.m文件中实现main方法，main方法编写要执行的代码即可。具体实例如下：</p>
+
+<p>编写一个NSOperation的子类，只需实现main方法。这里非常类似Java的Thread，你可以继承它，并覆盖run方法，在该方法里面写入需要执行的代码。这里的main方法和run方法作用是相似的。
+头文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@interface MyTask : NSOperation { 
+</span><span class='line'>    int operationId; 
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@property int operationId;
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里的operationId属性不是必须的，是我想在后面标识区分多个Task的标识位。m文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@implementation MyTask
+</span><span class='line'>
+</span><span class='line'>@synthesize operationId;
+</span><span class='line'>
+</span><span class='line'>- (void)main{ 
+</span><span class='line'>    NSLog(@"task %i run … ",operationId); 
+</span><span class='line'>    [NSThread sleepForTimeInterval:10]; 
+</span><span class='line'>    NSLog(@"task %i is finished. ",operationId); 
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>@end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里模拟了一个耗时10秒钟的操作。下面需要把Task加入到队列中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)viewDidLoad { 
+</span><span class='line'>    [super viewDidLoad]; 
+</span><span class='line'>    queue=[[NSOperationQueue alloc] init]; 
+</span><span class='line'>    
+</span><span class='line'>    int index=1; 
+</span><span class='line'>    MyTask *task=[[MyTask alloc] init]; 
+</span><span class='line'>    task.operationId=index++; 
+</span><span class='line'>         
+</span><span class='line'>    [queue addOperation:task];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行结果是，界面出现了，而task还未执行完，说明是多线程的。10秒钟后，日志打印完毕.</p>
+
+<p>注：a.如何控制线程池中的线程数</p>
+
+<p>队列里可以加入很多个NSOperation, 可以把NSOperationQueue看作一个线程池，可往线程池中添加操作（NSOperation）到队列中。线程池中的线程可看作消费者，从队列中取走操作，并执行它。
+通过下面的代码设置：
+[queue setMaxConcurrentOperationCount:5];
+线程池中的线程数，也就是并发操作数。默认情况下是-1，-1表示没有限制，这样会同时运行队列中的全部的操作。</p>
+
+<p>b.队列的取消，暂停和恢复</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> //取消队列的所有操作
+</span><span class='line'>
+</span><span class='line'> - (void)cancelAllOperations;
+</span><span class='line'>
+</span><span class='line'>提⽰:也可以调用NSOperation的- (void)cancel⽅法取消单个操作
+</span><span class='line'>
+</span><span class='line'> //暂停和恢复队列
+</span><span class='line'>
+</span><span class='line'>- (void)setSuspended:(BOOL)b; // YES代表暂停队列,NO代表恢复队列
+</span><span class='line'>
+</span><span class='line'>- (BOOL)isSuspended; //当前状态
+</span><span class='line'>
+</span><span class='line'>//暂停和恢复的适用场合：在tableview界面，开线程下载远程的网络界面，对UI会有影响，使用户体验变差。那么这种情况，就可以设置在用户操作UI（如滚动屏幕）的时候，暂停队列（不是取消队列），停止滚动的时候，恢复队列。</span></code></pre></td></tr></table></div></figure>
+
+
 <p>3.GCD:Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
 
 <p>GCD的工作原理是：让程序平行排队的特定任务，根据可用的处理资源，安排他们在任何可用的处理器核心上执行任务。</p>

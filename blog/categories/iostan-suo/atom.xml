@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ios探索 | 永不言弃]]></title>
   <link href="http://devcatin.github.io/blog/categories/iostan-suo/atom.xml" rel="self"/>
   <link href="http://devcatin.github.io/"/>
-  <updated>2015-04-18T15:43:36+08:00</updated>
+  <updated>2015-04-28T17:41:33+08:00</updated>
   <id>http://devcatin.github.io/</id>
   <author>
     <name><![CDATA[Grant]]></name>
@@ -64,6 +64,116 @@ NSOperation是个抽象类，使用它必须用它的子类，可以实现它或
 创建NSOperation子类的对象，把对象添加到NSOperationQueue队列里执行。</p>
 
 <p>使用 NSOperation的方式有两种，一种是用定义好的两个子类：NSInvocationOperation 和 NSBlockOperation；另一种是继承NSOperation。</p>
+
+<p>1).方式一是使用NSInvocationOperation，具体实例如下:</p>
+
+<pre><code>#import "ViewController.h"  
+#define kURL @"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"  
+
+@interface ViewController ()  
+
+@end  
+
+@implementation ViewController  
+
+- (void)viewDidLoad  
+{  
+    [super viewDidLoad];  
+    NSInvocationOperation *operation = [[NSInvocationOperation alloc]initWithTarget:self  
+                                                                           selector:@selector(downloadImage:)  
+                                                                             object:kURL];  
+
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];  
+    [queue addOperation:operation];  
+    // Do any additional setup after loading the view, typically from a nib.  
+}  
+
+-(void)downloadImage:(NSString *)url{  
+    NSLog(@"url:%@", url);  
+    NSURL *nsUrl = [NSURL URLWithString:url];  
+    NSData *data = [[NSData alloc]initWithContentsOfURL:nsUrl];  
+    UIImage * image = [[UIImage alloc]initWithData:data];  
+    [self performSelectorOnMainThread:@selector(updateUI:) withObject:image waitUntilDone:YES];  
+}  
+-(void)updateUI:(UIImage*) image{  
+    self.imageView.image = image;  
+} 
+</code></pre>
+
+<p>注解：a.viewDidLoad方法里可以看到我们用NSInvocationOperation建了一个后台线程，并且放到NSOperationQueue中。后台线程执行downloadImage方法。</p>
+
+<p>b.downloadImage 方法处理下载图片的逻辑。下载完成后用performSelectorOnMainThread执行主线程updateUI方法。</p>
+
+<p>c.updateUI 并把下载的图片显示到图片控件中。</p>
+
+<p>2).方式二是继承NSOperation：在.m文件中实现main方法，main方法编写要执行的代码即可。具体实例如下：</p>
+
+<p>编写一个NSOperation的子类，只需实现main方法。这里非常类似Java的Thread，你可以继承它，并覆盖run方法，在该方法里面写入需要执行的代码。这里的main方法和run方法作用是相似的。
+头文件：</p>
+
+<pre><code>@interface MyTask : NSOperation { 
+    int operationId; 
+}
+
+@property int operationId;
+
+@end
+</code></pre>
+
+<p>这里的operationId属性不是必须的，是我想在后面标识区分多个Task的标识位。m文件：</p>
+
+<pre><code>@implementation MyTask
+
+@synthesize operationId;
+
+- (void)main{ 
+    NSLog(@"task %i run … ",operationId); 
+    [NSThread sleepForTimeInterval:10]; 
+    NSLog(@"task %i is finished. ",operationId); 
+}
+
+@end
+</code></pre>
+
+<p>这里模拟了一个耗时10秒钟的操作。下面需要把Task加入到队列中：</p>
+
+<pre><code>- (void)viewDidLoad { 
+    [super viewDidLoad]; 
+    queue=[[NSOperationQueue alloc] init]; 
+
+    int index=1; 
+    MyTask *task=[[MyTask alloc] init]; 
+    task.operationId=index++; 
+
+    [queue addOperation:task];
+}
+</code></pre>
+
+<p>运行结果是，界面出现了，而task还未执行完，说明是多线程的。10秒钟后，日志打印完毕.</p>
+
+<p>注：a.如何控制线程池中的线程数</p>
+
+<p>队列里可以加入很多个NSOperation, 可以把NSOperationQueue看作一个线程池，可往线程池中添加操作（NSOperation）到队列中。线程池中的线程可看作消费者，从队列中取走操作，并执行它。
+通过下面的代码设置：
+[queue setMaxConcurrentOperationCount:5];
+线程池中的线程数，也就是并发操作数。默认情况下是-1，-1表示没有限制，这样会同时运行队列中的全部的操作。</p>
+
+<p>b.队列的取消，暂停和恢复</p>
+
+<pre><code> //取消队列的所有操作
+
+ - (void)cancelAllOperations;
+
+提⽰:也可以调用NSOperation的- (void)cancel⽅法取消单个操作
+
+ //暂停和恢复队列
+
+- (void)setSuspended:(BOOL)b; // YES代表暂停队列,NO代表恢复队列
+
+- (BOOL)isSuspended; //当前状态
+
+//暂停和恢复的适用场合：在tableview界面，开线程下载远程的网络界面，对UI会有影响，使用户体验变差。那么这种情况，就可以设置在用户操作UI（如滚动屏幕）的时候，暂停队列（不是取消队列），停止滚动的时候，恢复队列。
+</code></pre>
 
 <p>3.GCD:Grand Central Dispatch 简称（GCD）是苹果公司开发的技术，以优化的应用程序支持多核心处理器和其他的对称多处理系统的系统。这建立在任务并行执行的线程池模式的基础上的。它首次发布在Mac OS X 10.6 ，iOS 4及以上也可用。</p>
 
